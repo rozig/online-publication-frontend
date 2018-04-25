@@ -1,15 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { AuthService } from './../services/auth.service';
+import { DataService } from './../services/data.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-main',
+  selector: 'main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit {
-
-  constructor() { }
+export class MainComponent implements OnInit, OnDestroy {
+  private user;
+  private userMenu: boolean = false;
+  private isAuthenticated: Observable<boolean>;
+  private subscription;
+  constructor(private authService: AuthService, private dataService: DataService) { }
 
   ngOnInit() {
+    this.isAuthenticated = this.authService.checkAuth();
+    if(localStorage.getItem('token')) {
+      this.subscription = this.dataService.getUser().subscribe(response => {
+        this.user = response['data'];
+        sessionStorage.setItem('user', this.user);
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

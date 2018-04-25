@@ -9,13 +9,20 @@
           </div>
         </div>
         <div class="col col-4">
-          <div class="auth-menu">
+          <div class="auth-menu" *ngIf="(isAuthenticated | async) == false;else userMenuTemplate">
             <button class="header-btn login" [routerLink]="['/login']">Login</button>
             <button class="header-btn sign-up" [routerLink]="['/register']">Sign Up</button>
           </div>
+          <ng-template #userMenuTemplate>
+            <div *ngIf="user" class="user-menu">
+              <div class="user-info" (click)="userMenu = !userMenu">
+                <img [src]="user.profile_picture" alt="">
+              </div>
+            </div>
+          </ng-template>
         </div>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col col-12">
           <div class="categories">
             <a routerLink="." class="category-item active">All</a>
@@ -24,6 +31,12 @@
             <a routerLink="." class="category-item">Science</a>
           </div>
         </div>
+      </div> -->
+      <div *ngIf="user && userMenu" class="user-menu-dropdown">
+        <a [routerLink]="['/new-post']" (click)="userMenu = !userMenu" class="dropdown-item">New Post</a>
+        <a [routerLink]="['/@' + user.username]" (click)="userMenu = !userMenu" class="dropdown-item">Profile</a>
+        <a [routerLink]="['/following']" (click)="userMenu = !userMenu" class="dropdown-item">Following Users</a>
+        <a (click)="authService.logout(); userMenu = !userMenu" class="dropdown-item">Logout</a>
       </div>
     </div>
   </div>
