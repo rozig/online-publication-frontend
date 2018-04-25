@@ -1,0 +1,79 @@
+.wrapper {
+  overflow-y: scroll;
+  position: absolute;
+  padding-top: 95px;
+  z-index: 5;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 0;
+  .header {
+    border-bottom: 1px solid #ccc;
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+    top: 0;
+    .logo {
+      text-align: center;
+      overflow: hidden;
+      h2 {
+        font-weight: normal;
+        font-size: 36px;
+        margin: 0;
+      }
+    }
+    .auth-menu {
+      padding: 10px 30px;
+      text-align: right;
+      line-height: 34px;
+      height: 54px;
+      width: 100%;
+      .header-btn {
+        background-color: white;
+        border: 1px solid white;
+        display: inline-block;
+        border-radius: 3px;
+        padding: 5px 10px;
+        cursor: pointer;
+        outline: none;
+        &.login {
+          color: black;
+        }
+        &.sign-up {
+          border-color: black;
+          color: black;
+        }
+      }
+    }
+    .categories {
+      overflow-y: hidden;
+      overflow-x: auto;
+      display: block;
+      height: 40px;
+      width: 100%;
+      .category-item {
+        -webkit-transition: 0.2s all;
+        -moz-transition: 0.2s all;
+        -ms-transition: 0.2s all;
+        -o-transition: 0.2s all;
+        transition: 0.2s all;
+        text-transform: uppercase;
+        display: inline-block;
+        line-height: 40px;
+        font-size: 14px;
+        padding: 0 20px;
+        cursor: pointer;
+        height: 40px;
+        &:hover {
+          color: #7e7e7e;
+        }
+      }
+    }
+  }
+
+  .main {
+    overflow: hidden;
+    width: 100%;
+  }
+}

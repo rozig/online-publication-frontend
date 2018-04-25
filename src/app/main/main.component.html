@@ -1,0 +1,35 @@
+<div class="wrapper">
+  <div class="header">
+    <div class="container">
+      <div class="row">
+        <div class="col col-4"></div>
+        <div class="col col-4">
+          <div class="logo">
+            <h2>Infy</h2>
+          </div>
+        </div>
+        <div class="col col-4">
+          <div class="auth-menu">
+            <button class="header-btn login" [routerLink]="['/login']">Login</button>
+            <button class="header-btn sign-up" [routerLink]="['/register']">Sign Up</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-12">
+          <div class="categories">
+            <a routerLink="." class="category-item active">All</a>
+            <a routerLink="." class="category-item">Publication</a>
+            <a routerLink="." class="category-item">Theory</a>
+            <a routerLink="." class="category-item">Science</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

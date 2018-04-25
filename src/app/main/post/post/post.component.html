@@ -1,0 +1,29 @@
+<div class="post-item">
+  <a [routerLink]="['/@' + post.author.username]" class="post-image-link" [style.backgroundImage]="'url(' + post.image + ')'">
+    <div class="image-wrapper">
+      <p class="post-brief-description">{{ post.body }}</p>
+      <div class="meta">
+        <div class="meta-item">
+          <i class="icon ion-android-favorite"></i> {{ post.upVotes.length - post.downVotes.length }}
+        </div>
+        <div class="meta-item">
+          <i class="icon ion-chatbubbles"></i> {{ post.comments.length }}
+        </div>
+      </div>
+    </div>
+  </a>
+  <div class="post-meta">
+    <a routerLink="." class="post-title">{{ post.title }}</a>
+    <div class="category">
+      Posted in:
+      <a routerLink=".">Theory</a>
+    </div>
+    <div class="post-author">
+      <img [src]="post.author.profile_picture" alt="{{ post.author.firstname + ' ' + post.author.lastname }}">
+      <div class="info">
+        <a [routerLink]="['/@' + post.author.username]" class="author-name">{{ post.author.firstname + ' ' + post.author.lastname }}</a>
+        <span class="post-date">{{ post.created_date }}</span>
+      </div>
+    </div>
+  </div>
+</div>

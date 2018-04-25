@@ -1,0 +1,43 @@
+<div class="wrapper">
+  <div class="container">
+    <form (ngSubmit)="onSubmit()" #f="ngForm" novalidate>
+      <div class="profile-image">
+        <img *ngIf="model.profilePicture" [src]="tmpProfile" alt="Profile image">
+        <label for="profile-picture">
+          <input type="file" id="profile-picture" [(ngModel)]="model.profilePicture" name="profile-picture" class="form-control" #profilePicture="ngModel" (change)="updateImage($event)" [disabled]="freeze" />
+          <i class="icon ion-camera"></i>
+        </label>
+      </div>
+      <div class="form-group" [class.has-danger]="firstname.invalid && (firstname.dirty || firstname.touched)">
+        <input type="text" [(ngModel)]="model.firstname" name="firstname" class="form-control" required placeholder="Firstname" #firstname="ngModel" [disabled]="freeze" />
+      </div>
+      <div class="form-group" [class.has-danger]="lastname.invalid && (lastname.dirty || lastname.touched)">
+        <input type="text" [(ngModel)]="model.lastname" name="lastname" class="form-control" required placeholder="Fastname" #lastname="ngModel" [disabled]="freeze" />
+      </div>
+      <div class="form-group" [class.has-danger]="username.invalid && (username.dirty || username.touched)">
+        <input type="text" [(ngModel)]="model.username" name="username" class="form-control" required placeholder="Username" #username="ngModel" [disabled]="freeze" />
+      </div>
+      <div class="form-group" [class.has-danger]="email.invalid && (email.dirty || email.touched)">
+        <input type="email" [(ngModel)]="model.email" name="email" class="form-control" required placeholder="Email address" #email="ngModel" [disabled]="freeze" />
+      </div>
+      <div class="form-group" [ngClass]="{
+        'has-danger': password.invalid && (password.dirty || password.touched),
+        'has-success': password.valid && (password.dirty || password.touched)
+      }">
+        <input type="password" [(ngModel)]="model.password" name="password" class="form-control" required placeholder="Password" #password="ngModel" [disabled]="freeze" (input)="checkPassword()" />
+      </div>
+      <div class="form-group" [ngClass]="{
+        'has-danger': passwordRepeat.invalid && (passwordRepeat.dirty || passwordRepeat.touched),
+        'has-success': passwordRepeat.valid && (passwordRepeat.dirty || passwordRepeat.touched)
+      }">
+        <input type="password" [(ngModel)]="password_repeat" name="password-repeat" class="form-control" required placeholder="Repeat your password" #passwordRepeat="ngModel" [disabled]="freeze" (input)="checkPassword()" />
+        <p *ngIf="passwordError">Passwords doesn't match</p>
+      </div>
+      <button type="submit" class="form-submit" [disabled]="f.invalid || freeze">Register</button>
+    </form>
+    <div class="register">
+      <span>Already have an account?</span>
+      <button [routerLink]="['/login']" class="sign-up" [disabled]="freeze">Sign In</button>
+    </div>
+  </div>
+</div>
