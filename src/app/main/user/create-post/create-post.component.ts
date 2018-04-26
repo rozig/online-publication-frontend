@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgProgress } from '@ngx-progressbar/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
 
 import { DataService } from './../../../services/data.service';
 
 @Component({
-  selector: 'app-create-post',
+  selector: 'create-post',
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.scss']
 })
@@ -18,7 +17,7 @@ export class CreatePostComponent implements OnInit {
     draft: false
   };
   private freeze: boolean = false;
-  constructor(private dataService: DataService, private progress: NgProgress, private toastr: ToastrService, private router: Router, private location: Location) { }
+  constructor(private dataService: DataService, private progress: NgProgress, private toastr: ToastrService, private router: Router) { }
 
   ngOnInit() {
   }
