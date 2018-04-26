@@ -75,5 +75,13 @@ export class DataService {
     return this.http.post(`${this.BASE_URL}/user/follow`, payload, { headers: this.headers });
 
   }
+
+  updateProfile(payload: object): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(token) {
+      this.headers = this.headers.set('x-token', localStorage.getItem('token'));
+    }
+    return this.http.put(`${this.BASE_URL}/user`, payload, { headers: this.headers });
+  }
 }
 

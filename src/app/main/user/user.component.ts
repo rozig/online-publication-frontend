@@ -17,6 +17,7 @@ export class UserComponent implements OnInit, OnDestroy {
   private userSubscription;
   private postsSubscription;
   private followSubscription;
+  private updateProfileSubscription;
   private tab: string = 'posts';
   private profilePicture: string;
   private tmpProfile: string;
@@ -24,7 +25,8 @@ export class UserComponent implements OnInit, OnDestroy {
   private fullname: string;
   private myself: boolean = false;
   private following: boolean = false;
-  
+  private bio: string;
+
   constructor(private dataService: DataService, private progress: NgProgress, private toastr: ToastrService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -34,6 +36,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.userSubscription = this.dataService.getUserByUsername(username).subscribe(response => {
         this.user = response['data'];
         this.fullname = `${this.user.firstname} ${this.user.lastname}`;
+        this.bio = this.user.bio;
         const sessionUser = JSON.parse(sessionStorage.getItem('user'));
         if(sessionUser._id === this.user._id) {
           this.myself = true;
@@ -93,6 +96,26 @@ export class UserComponent implements OnInit, OnDestroy {
     });
   }
 
+  updateProfile() {
+    this.progress.start();
+    const firstname = this.fullname.split(" ")[0];
+    const lastname = this.fullname.split(" ")[1];
+    this.updateProfileSubscription = this.dataService.updateProfile({firstname: firstname, lastname: lastname, bio: this.user.bio}).subscribe(response => {
+      this.bio = this.user.bio;
+      const sessionUser = JSON.parse(sessionStorage.getItem('user'));
+      sessionUser.bio = this.bio;
+      sessionUser.firstname = firstname;
+      sessionUser.lastname = lastname;
+      sessionStorage.setItem('user', JSON.stringify(sessionUser));
+      this.toastr.success(response.message);
+    }, err => {
+      this.toastr.error(err.error.message);
+      this.progress.complete();
+    }, () => {
+      this.progress.complete();
+    });
+  }
+
   ngOnDestroy() {
     if(this.paramSubscription) {
       this.paramSubscription.unsubscribe();
@@ -105,6 +128,9 @@ export class UserComponent implements OnInit, OnDestroy {
     }
     if(this.followSubscription) {
       this.followSubscription.unsubscribe();
+    }
+    if(this.updateProfileSubscription) {
+      this.updateProfileSubscription.unsubscribe();
     }
   }
 
