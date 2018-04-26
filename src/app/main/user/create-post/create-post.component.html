@@ -7,7 +7,7 @@
     <div class="post-image">
       <img class="tmp-image" *ngIf="model.image" [src]="tmpImage">
       <label for="image" [class.hide]="model.image">
-        <input type="file" id="image" [(ngModel)]="model.image" name="post-image" (change)="updatePostImage($event)" />
+        <input type="file" id="image" name="post-image" (change)="updatePostImage($event)" />
         <i class="icon ion-camera"></i>
       </label>
     </div>

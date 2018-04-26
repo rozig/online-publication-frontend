@@ -36,25 +36,54 @@ export class CreatePostComponent implements OnInit {
         this.tmpImage = evt.target.result;
       }
       this.currentImage = evt.target.files[0];
-      this.uploadToS3('post', evt.target.files[0]);
+      this.model['image'] = this.currentImage;
+
       reader.readAsDataURL(evt.target.files[0]);
     }
   }
 
   onSubmit() {
-
     this.progress.start();
     this.freeze = true;
-    this.dataService.createPost(this.model).subscribe(data => {
-      this.toastr.success('Post successfully created!');
-    }, err => {
-      this.toastr.error(err.error.message);
-      this.freeze = false;
-      this.progress.complete();
-    }, () => {
-      this.freeze = false;
-      this.router.navigate(['/']);
-      this.progress.complete();
+    const AWSService = AWS;
+    const region = 'us-east-1';
+    const bucketName = 'online-publication';
+    const accessKeyId = 'AKIAIX5R6JCUZ2FSGL3A';
+    const secretAccessKey = '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';
+    const folderName = 'post-images/';
+
+    const bucket = new S3({
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
+      region: region
+    });
+
+    const params = {
+      Bucket: bucketName,
+      Key: folderName + this.currentImage.name,
+      Body: this.currentImage,
+      ACL: 'public-read',
+      ContentType: this.currentImage.type
+    };
+
+    bucket.upload(params, (err, data) => {
+      if (err) {
+        this.toastr.error(err.error.message);
+        this.freeze = false;
+        this.progress.complete();
+      }
+      this.model['image'] = data.Location;
+      this.dataService.createPost(this.model).subscribe(data => {
+        this.toastr.success('Post successfully created!');
+      }, err => {
+        this.toastr.error(err.error.message);
+        this.freeze = false;
+        this.progress.complete();
+      }, () => {
+        this.freeze = false;
+        this.router.navigate(['/']);
+        this.progress.complete();
+      });
     });
   }
 
@@ -81,7 +110,9 @@ export class CreatePostComponent implements OnInit {
     const params = {
       Bucket: bucketName,
       Key: folderName + file.name,
-      Body: file
+      Body: file,
+      ACL: 'public-read',
+      ContentType: file.type
     };
 
     bucket.upload(params, function (err, data) {
@@ -89,9 +120,7 @@ export class CreatePostComponent implements OnInit {
         console.log('There was an error uploading your file: ', err);
         return false;
       }
-
-      console.log('Successfully uploaded file.', data);
-      return true;
+      return data;
     });
   }
 }

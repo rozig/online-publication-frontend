@@ -35,7 +35,7 @@
       <div *ngIf="user && userMenu" class="user-menu-dropdown">
         <a [routerLink]="['/new-post']" (click)="userMenu = !userMenu" class="dropdown-item">New Post</a>
         <a [routerLink]="['/@' + user.username]" (click)="userMenu = !userMenu" class="dropdown-item">Profile</a>
-        <a [routerLink]="['/following']" (click)="userMenu = !userMenu" class="dropdown-item">Following Users</a>
+        <!-- <a [routerLink]="['/following']" (click)="userMenu = !userMenu" class="dropdown-item">Following Users</a> -->
         <a (click)="authService.logout(); userMenu = !userMenu" class="dropdown-item">Logout</a>
       </div>
     </div>

@@ -28,32 +28,27 @@ export class PostDetailsComponent implements OnInit {
   private isAuthenticated: Observable<boolean>;
 
   private userSubscription;
-  
+
 constructor(private authService: AuthService,private dataService: DataService, private progress: NgProgress, private toastr: ToastrService, private router: Router, private route: ActivatedRoute) {}
-  
+
   ngOnInit() {
     this.isAuthenticated = this.authService.checkAuth();
     this.sessionUser = JSON.parse(sessionStorage.getItem('user'));
-    console.log(this.sessionUser);
-
-
     this.paramSubscription = this.route.params.subscribe(params => {
-      
-      console.log("params:"+params['post_id']);
-
-      this.postSubscription = this.dataService.getPostDetail(params['post_id']).subscribe(response => {
-          console.log(response);
+      const idParameter = params['post_id'].split('-');
+      const postId = idParameter[idParameter.length - 1];
+      this.postSubscription = this.dataService.getPostDetail(postId).subscribe(response => {
           this.post = response['data'];
       });
     });
 
   }
 
-  createComment(post_id,newComment:string){
+  createComment(post_id, newComment: string){
     const sendNewComment = {
-      "text": newComment
+      text: newComment
     }
-    this.commentSubscription = this.dataService.createComment(post_id,sendNewComment).subscribe(response=>{
+    this.commentSubscription = this.dataService.createComment(post_id, sendNewComment).subscribe(response => {
       this.toastr.success(response['message']);
       this.post.comments.push(response['data']);
     }, err => {
@@ -73,7 +68,7 @@ constructor(private authService: AuthService,private dataService: DataService, p
       this.toastr.error(err.error.message);
       this.progress.complete();
     },()=>{
-      this.progress.complete();      
+      this.progress.complete();
     });
   }
   editComment(comment_id,post_id,updatedComment){
@@ -90,7 +85,7 @@ constructor(private authService: AuthService,private dataService: DataService, p
       this.toastr.error(err.error.message);
       this.progress.complete();
     },()=>{
-      this.progress.complete();      
+      this.progress.complete();
     });
   }
 

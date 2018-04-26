@@ -7,11 +7,12 @@ import {
 @Component({
   selector: 'post',
   templateUrl: './post.component.html',
-  styleUrls: ['./post.component.scss']
+  styleUrls: ['./post.component.scss'],
+  host: {'[class.post-item]':'true'}
 })
 export class PostComponent implements OnInit {
   @Input() post;
-  
+
   constructor() { }
 
   ngOnInit() {
