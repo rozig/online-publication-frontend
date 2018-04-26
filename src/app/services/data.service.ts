@@ -25,7 +25,11 @@ export class DataService {
     return this.http.post(`${this.BASE_URL}/posts`, payload, { headers: this.headers });
   }
 
-  getHomePost(){
+  getHomePost(): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(token) {
+      this.headers = this.headers.set('x-token', localStorage.getItem('token'));
+    }
     return this.http.get(`${this.BASE_URL}/posts`,{headers:this.headers});
   }
 

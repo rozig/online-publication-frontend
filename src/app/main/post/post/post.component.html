@@ -1,4 +1,4 @@
-<a [routerLink]="['/@' + post.author.username +'/'+ (post.title + '-' + post._id | slugify)]" class="post-image-link" [style.backgroundImage]="'url(' +  '/assets/postimg1.jpg'+ ')'">
+<a [routerLink]="['/@' + post.author.username +'/'+ (post.title + '-' + post._id | slugify)]" class="post-image-link" [style.backgroundImage]="'url(' + post.image + ')'">
   <div class="image-wrapper">
     <p class="post-brief-description" [innerHTML]="post.body"></p>
     <div class="meta">

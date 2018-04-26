@@ -5,7 +5,7 @@
         <div class="col col-4"></div>
         <div class="col col-4">
           <div class="logo">
-            <h2>Infy</h2>
+            <h2><a [routerLink]="['/']">Infy</a></h2>
           </div>
         </div>
         <div class="col col-4">
@@ -16,7 +16,7 @@
           <ng-template #userMenuTemplate>
             <div *ngIf="user" class="user-menu">
               <div class="user-info" (click)="userMenu = !userMenu">
-                <img [src]="user.profile_picture" alt="">
+                <img [src]="user.profile_picture" alt="@{{ user.username }}">
               </div>
             </div>
           </ng-template>

@@ -30,14 +30,14 @@
       <div class="post-footer-button-left">
     <!-- <a href="#"><i class="ion-happy"></i></a><span>{{post.upVotes.length}}</span>
         <a href="#"><i class="ion-sad"></i></a><span>{{post.downVotes.length}}</span> -->
-        <a href="#"><i class="ion-arrow-up-c"></i></a><span>{{post.upVotes.length}}</span>
-        <a href="#"><i class="ion-arrow-down-c"></i></a><span>{{post.upVotes.length}}</span>
+        <a [routerLink]="['.']"><i class="ion-arrow-up-c"></i></a><span>{{post.upVotes.length}}</span>
+        <a [routerLink]="['.']"><i class="ion-arrow-down-c"></i></a><span>{{post.upVotes.length}}</span>
 
       </div>
       <div class="post-footer-button-right">
-        <a href="#"> <i class="ion-chatbubble-working"></i> </a><span>{{post.comments.length}}</span>
-        <a href="#"> <i class="ion-social-facebook"> </i></a>
-        <a href="#"> <i class="ion-social-twitter"> </i></a>
+        <a [routerLink]="['.']"> <i class="ion-chatbubble-working"></i> </a><span>{{post.comments.length}}</span>
+        <a [routerLink]="['.']"> <i class="ion-social-facebook"> </i></a>
+        <a [routerLink]="['.']"> <i class="ion-social-twitter"> </i></a>
       </div>
     </div>
   </div>

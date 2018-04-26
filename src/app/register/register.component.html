@@ -1,10 +1,10 @@
 <div class="wrapper">
   <div class="container">
     <form (ngSubmit)="onSubmit()" #f="ngForm" novalidate>
-      <div class="profile-image">
-        <img *ngIf="model.profilePicture" [src]="tmpProfile" alt="Profile image">
+      <div class="profile-image" [class.error]="profilePictureError">
+        <img *ngIf="currentPicture" [src]="tmpProfile" alt="Profile image">
         <label for="profile-picture">
-          <input type="file" id="profile-picture" [(ngModel)]="model.profilePicture" name="profile-picture" class="form-control" #profilePicture="ngModel" (change)="updateImage($event)" [disabled]="freeze" />
+          <input type="file" id="profile-picture" name="profile-picture" (change)="updateImage($event)" [disabled]="freeze" required />
           <i class="icon ion-camera"></i>
         </label>
       </div>
@@ -18,7 +18,7 @@
         <input type="text" [(ngModel)]="model.username" name="username" class="form-control" required placeholder="Username" #username="ngModel" [disabled]="freeze" />
       </div>
       <div class="form-group" [class.has-danger]="email.invalid && (email.dirty || email.touched)">
-        <input type="email" [(ngModel)]="model.email" name="email" class="form-control" required placeholder="Email address" #email="ngModel" [disabled]="freeze" />
+        <input type="email" [(ngModel)]="model.email" name="email" class="form-control" required placeholder="Email address" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" #email="ngModel" [disabled]="freeze" />
       </div>
       <div class="form-group" [ngClass]="{
         'has-danger': password.invalid && (password.dirty || password.touched),

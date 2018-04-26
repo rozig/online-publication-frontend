@@ -6,6 +6,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { NgProgressModule } from '@ngx-progressbar/core';
 import { ToastrModule } from 'ngx-toastr';
+import { NgStringPipesModule } from 'angular-pipes';
 
 import { MainComponent } from './main.component';
 import { HomeComponent } from './home/home.component';
@@ -15,7 +16,6 @@ import { UserComponent } from './user/user.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { ClickOutsideDirective } from './../directives/click-outside.directive';
 import { CreatePostComponent } from './user/create-post/create-post.component';
-import { SlugifyPipe } from 'angular-pipes';
 
 const config: object = {
   color: '#1abc9c',
@@ -31,8 +31,7 @@ const config: object = {
     UserComponent,
     ProfileComponent,
     ClickOutsideDirective,
-    CreatePostComponent,
-    SlugifyPipe
+    CreatePostComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +41,8 @@ const config: object = {
     NgProgressModule.forRoot(config),
     ToastrModule.forRoot(),
     FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    FroalaViewModule.forRoot(),
+    NgStringPipesModule
   ],
   bootstrap: [MainComponent]
 })

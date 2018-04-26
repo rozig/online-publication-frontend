@@ -17,7 +17,7 @@ import { AuthService } from './../../../services/auth.service';
 export class PostDetailsComponent implements OnInit {
 
   private sessionUser;
-  private post;
+  public post;
   private newComment;
   private updatedComment;
   private commentMode: string = 'view';

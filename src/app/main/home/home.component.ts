@@ -11,12 +11,12 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  private posts;
+  public posts;
   //private userMenu: boolean = false;
   //private isAuthenticated: Observable<boolean>;
   private subscription;
 
-  constructor(//private authService: AuthService, 
+  constructor(//private authService: AuthService,
   	private dataService: DataService) {}
 
   ngOnInit() {
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.posts = response['data'];
       });
   }
-  
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

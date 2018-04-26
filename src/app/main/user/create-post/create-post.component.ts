@@ -14,7 +14,7 @@ import { DataService } from './../../../services/data.service';
   styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent implements OnInit {
-  private model: object = {
+  public model: object = {
     title: '',
     body: '',
     image: '',
@@ -22,7 +22,7 @@ export class CreatePostComponent implements OnInit {
   };
   private currentImage;
   private tmpImage: string;
-  private freeze: boolean = false;
+  public freeze: boolean = false;
   constructor(private dataService: DataService, private progress: NgProgress, private toastr: ToastrService, private router: Router) { }
 
   ngOnInit() {

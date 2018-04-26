@@ -10,9 +10,9 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, OnDestroy {
-  private user;
-  private userMenu: boolean = false;
-  private isAuthenticated: Observable<boolean>;
+  public user;
+  public userMenu: boolean = false;
+  public isAuthenticated: Observable<boolean>;
   private subscription;
   constructor(private authService: AuthService, private dataService: DataService) { }
 

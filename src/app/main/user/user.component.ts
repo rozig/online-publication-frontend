@@ -3,6 +3,9 @@ import { NgProgress } from '@ngx-progressbar/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import * as AWS from 'aws-sdk/global';
+import * as S3 from 'aws-sdk/clients/s3';
+
 import { DataService } from './../../services/data.service';
 
 @Component({
@@ -11,19 +14,19 @@ import { DataService } from './../../services/data.service';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit, OnDestroy {
-  private user;
+  public user;
   private posts;
   private paramSubscription;
   private userSubscription;
   private postsSubscription;
   private followSubscription;
   private updateProfileSubscription;
-  private tab: string = 'posts';
+  public tab: string = 'posts';
   private profilePicture: string;
   private tmpProfile: string;
-  private mode: string = 'view';
+  public mode: string = 'view';
   private fullname: string;
-  private myself: boolean = false;
+  public myself: boolean = false;
   private following: boolean = false;
   private bio: string;
 
@@ -64,13 +67,53 @@ export class UserComponent implements OnInit, OnDestroy {
 
   updateProfilePicture(evt: any) {
     if (evt.target.files && evt.target.files[0]) {
+      this.progress.start();
       const reader = new FileReader();
 
       reader.onload = (evt:any) => {
         this.tmpProfile = evt.target.result;
       }
-
       reader.readAsDataURL(evt.target.files[0]);
+
+      const AWSService = AWS;
+      const region = 'us-east-1';
+      const bucketName = 'online-publication';
+      const accessKeyId = 'AKIAIX5R6JCUZ2FSGL3A';
+      const secretAccessKey = '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';
+      const folderName = 'profile-pictures/';
+
+      const bucket = new S3({
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
+        region: region
+      });
+
+      const params = {
+        Bucket: bucketName,
+        Key: folderName + evt.target.files[0].name,
+        Body: evt.target.files[0],
+        ACL: 'public-read',
+        ContentType: evt.target.files[0].type
+      };
+
+      bucket.upload(params, (err, data) => {
+        if (err) {
+          this.toastr.error(err.error.message);
+          this.progress.complete();
+        }
+
+        this.updateProfileSubscription = this.dataService.updateProfile({profile_picture: data.Location}).subscribe(response => {
+          const sessionUser = JSON.parse(sessionStorage.getItem('user'));
+          sessionUser.profile_picture = data.Location;
+          sessionStorage.setItem('user', JSON.stringify(sessionUser));
+          this.toastr.success(response.message);
+        }, err => {
+          this.toastr.error(err.error.message);
+          this.progress.complete();
+        }, () => {
+          this.progress.complete();
+        });
+      });
     }
   }
 

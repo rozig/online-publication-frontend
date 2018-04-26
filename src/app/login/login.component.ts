@@ -11,11 +11,11 @@ import { AuthService } from './../services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  private model: object = {
+  public model: object = {
     username: '',
     password: ''
   };
-  private freeze: boolean = true;
+  public freeze: boolean = true;
   constructor(private authService: AuthService, private router: Router, private progress: NgProgress, private toastr: ToastrService) {}
 
   ngOnInit() {
