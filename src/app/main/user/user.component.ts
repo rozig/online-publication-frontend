@@ -26,6 +26,7 @@ export class UserComponent implements OnInit, OnDestroy {
   private myself: boolean = false;
   private following: boolean = false;
   private bio: string;
+
   constructor(private dataService: DataService, private progress: NgProgress, private toastr: ToastrService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {

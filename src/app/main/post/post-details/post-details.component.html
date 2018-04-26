@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div *ngIf="post" class="wrapper">
   <div class="section-insetColumn">
     <div class="post-author">
       <div class="post-author-image">
@@ -28,17 +28,20 @@
   <div class="section-insetColumn">
     <div class="post-footer">
       <div class="post-footer-button-left">
-        <button>&#8593;</button>
-        <button>&#8595;</button>
+    <!-- <a href="#"><i class="ion-happy"></i></a><span>{{post.upVotes.length}}</span>
+        <a href="#"><i class="ion-sad"></i></a><span>{{post.downVotes.length}}</span> -->
+        <a href="#"><i class="ion-arrow-up-c"></i></a><span>{{post.upVotes.length}}</span>
+        <a href="#"><i class="ion-arrow-down-c"></i></a><span>{{post.upVotes.length}}</span>
+        
       </div>
       <div class="post-footer-button-right">
-        <button>comment</button>
-        <button>f</button>
-        <button>t</button>
+        <a href="#"> <i class="ion-chatbubble-working"></i> </a><span>{{post.comments.length}}</span>
+        <a href="#"> <i class="ion-social-facebook"> </i></a>
+        <a href="#"> <i class="ion-social-twitter"> </i></a>
       </div>
     </div>
   </div>
-  <div class="section-insetColumn-comment">
+  <div  class="section-insetColumn-comment">
     <div *ngFor="let comment of post.comments" class="post-comment">
       <div class="post-comment-header">
         <div class="post-comment-author-image">
@@ -52,12 +55,26 @@
             <span class="post-date">{{ comment.created_date | date }}</span>
           </div>
         </div>
+        <div *ngIf="(isAuthenticated | async) == true && sessionUser._id == comment.author._id " class="post-comment-actions">
+          <div class="post-comment-action-delete">
+            <a (click)="deleteComment(comment._id,this.post._id);" ><i class="ion-ios-close"></i></a>
+          </div>
+          <div class="post-comment-action-update">
+            <a (click)="commentMode='update';"><i class="ion-edit"></i></a>
+          </div>
+        </div>
       </div>
-      <div class="post-comment-body">
+      <div *ngIf="commentMode=='view';else updateCommentTemplate" class="post-comment-body">
         <p>{{comment.text}}</p>
       </div>
+      <ng-template #updateCommentTemplate>
+      <div class="post-comment-body">
+        <textarea rows="4" name="comment" [(ngModel)]="updateComment" >{{comment.text}} </textarea>
+        <button class="publish-button" (click)="updateComment(comment._id,this.post._id,updateComment);">Publish</button>
+      </div>
+    </ng-template>
     </div>
-    <div class="post-comment">
+    <div *ngIf="(isAuthenticated | async) == true;else commentDisableTemplate" class="post-comment">
       <div class="post-comment-header">
         <div class="post-comment-author-image">
           <img [src]="post.author.profile_picture" alt="{{ post.author.firstname + ' ' + post.author.lastname }}">
@@ -70,10 +87,16 @@
       </div>
 
       <div class="post-comment-new-body">
-        <input type="text" name="comment">
-        <button [routerLink]="['/comment']" class="publish-button" [disabled]="freeze">Publish</button>
+        <textarea rows="4" name="comment" [(ngModel)]="newComment" placeholder="Write a response here..." ></textarea>
+        <button class="publish-button" (click)="createComment(this.post._id,newComment);">Publish</button>
       </div>
       
     </div>
+    <ng-template #commentDisableTemplate>
+      <div class="post-comment-disable">
+        <a href="/login">Write a response</a>
+      </div>
+    </ng-template>
   </div>
+
 </div>

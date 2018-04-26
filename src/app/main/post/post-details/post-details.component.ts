@@ -1,8 +1,13 @@
-import { 
-	Component, 
-	OnInit,
-	Input
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { NgProgress } from '@ngx-progressbar/core';
+import { ToastrService } from 'ngx-toastr';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+
+import { DataService } from './../../../services/data.service';
+import { AuthService } from './../../../services/auth.service';
+
 
 @Component({
   selector: 'app-post-details',
@@ -11,94 +16,82 @@ import {
 })
 export class PostDetailsComponent implements OnInit {
 
-  //@Input() post;
+  private sessionUser;
+  private post;
+  private newComment;
+  private updatedComment;
+  private commentMode: string = 'view';
 
+  private postSubscription;
+  private paramSubscription;
+  private commentSubscription;
+  private isAuthenticated: Observable<boolean>;
 
-    post = {
-        "draft": false,
-        "comments": [
-            {
-                "created_date": "2018-04-24T21:01:09.327Z",
-                "_id": "5adf9b15e47eddfed36aae5c",
-                "author": {
-                    "_id": "5ade4591b953ffece0bd832e",
-                    "firstname": "Enkhtulga",
-                    "lastname": "Tseveenkhuu",
-                    "email": "ts.enkhtulga@gmail.com",
-                    "username": "eta31",
-                    "profile_picture": "/assets/profile.jpg"
-                },
-                "text": "updated body123!"
-            },
-            {
-                "created_date": "2018-04-24T21:01:42.473Z",
-                "_id": "5adf9b36e47eddfed36aae5e",
-                "author": {
-                    "_id": "5ade4591b953ffece0bd832e",
-                    "firstname": "Enkhtulga",
-                    "lastname": "Tseveenkhuu",
-                    "email": "ts.enkhtulga@gmail.com",
-                    "username": "eta31",
-                    "profile_picture": "/assets/profile.jpg"
-                },
-                "text": "Eta's 6th comment"
-            },
-            {
-                "created_date": "2018-04-24T21:05:07.504Z",
-                "_id": "5adf9c034f3d83feec25faea",
-                "author": {
-                    "_id": "5ade4591b953ffece0bd832e",
-                    "firstname": "Enkhtulga",
-                    "lastname": "Tseveenkhuu",
-                    "email": "ts.enkhtulga@gmail.com",
-                    "username": "eta31",
-                    "profile_picture": "/assets/profile.jpg"
-                },
-                "text": "Eta's 8th comment"
-            },
-            {
-                "created_date": "2018-04-25T00:51:52.669Z",
-                "_id": "5adfd12800668dffb8aaf762",
-                "author": {
-                    "_id": "5ade4591b953ffece0bd832e",
-                    "firstname": "Enkhtulga",
-                    "lastname": "Tseveenkhuu",
-                    "email": "ts.enkhtulga@gmail.com",
-                    "username": "eta31",
-                    "profile_picture": "/assets/profile.jpg"
-                },
-                "text": "Eta's 8th comment"
-            }
-        ],
-        "upVotes": [],
-        "downVotes": [
-            {
-                "created_date": "2018-04-25T07:25:23.889Z",
-                "_id": "5ae02d63e65f7f087d9a30e1",
-                "author": "5ade4591b953ffece0bd832e"
-            }
-        ],
-        "created_date": "2018-04-24T17:56:15.021Z",
-        "_id": "5adf6fbf2ddcf2fa9bd6f950",
-        "title": "The Mistakes I Made As a Beginner Programmer",
-        "body": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio obcaecati voluptatum iusto itaque fugit dolorem temporibus sint officia fuga cupiditate consequuntur delectus, ipsam corporis. Dignissimos impedit nam excepturi ratione corporis?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio obcaecati voluptatum iusto itaque fugit dolorem temporibus sint officia fuga cupiditate consequuntur delectus, ipsam corporis. Dignissimos impedit nam excepturi ratione corporis? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio obcaecati voluptatum iusto itaque fugit dolorem temporibus sint officia fuga cupiditate consequuntur delectus, ipsam corporis. Dignissimos impedit nam excepturi ratione corporis?",
-        "author": {
-            "_id": "5ade4591b953ffece0bd832e",
-            "firstname": "Enkhtulga",
-            "lastname": "Tseveenkhuu",
-            "email": "ts.enkhtulga@gmail.com",
-            "username": "eta31",
-            "profile_picture": "/assets/profile.jpg"
-        },
-        "__v": 38,
-        "updated_date": "2018-04-25T02:59:55.903Z"
-    }
-
-
-  // @Output() 
-  constructor() { }
-
+  private userSubscription;
+  
+constructor(private authService: AuthService,private dataService: DataService, private progress: NgProgress, private toastr: ToastrService, private router: Router, private route: ActivatedRoute) {}
+  
   ngOnInit() {
+    this.isAuthenticated = this.authService.checkAuth();
+    this.sessionUser = JSON.parse(sessionStorage.getItem('user'));
+    console.log(this.sessionUser);
+
+
+    this.paramSubscription = this.route.params.subscribe(params => {
+      
+      console.log("params:"+params['post_id']);
+
+      this.postSubscription = this.dataService.getPostDetail(params['post_id']).subscribe(response => {
+          console.log(response);
+          this.post = response['data'];
+      });
+    });
+
+  }
+
+  createComment(post_id,newComment:string){
+    const sendNewComment = {
+      "text": newComment
+    }
+    this.commentSubscription = this.dataService.createComment(post_id,sendNewComment).subscribe(response=>{
+      this.toastr.success(response['message']);
+      this.post.comments.push(response['data']);
+    }, err => {
+      this.toastr.error(err.error.message);
+      this.progress.complete();
+    }, () => {
+      this.newComment = '';
+      this.progress.complete();
+    });
+  }
+
+  deleteComment(comment_id,post_id){
+    this.commentSubscription = this.dataService.deleteComment(comment_id,post_id).subscribe(response=>{
+      this.toastr.success(response['message']);
+      this.post.comments = this.post.comments.filter(comment=>comment._id != comment_id);
+    },err=>{
+      this.toastr.error(err.error.message);
+      this.progress.complete();
+    },()=>{
+      this.progress.complete();      
+    });
+  }
+  editComment(comment_id,post_id,updatedComment){
+    const sendNewComment = {
+      "text": updatedComment
+    }
+    this.commentSubscription = this.dataService.updateComment(comment_id,post_id,updatedComment).subscribe(response=>{
+      this.toastr.success(response['message']);
+      this.post.comments.forEach(comment=>{
+        if(comment._id ==comment_id)
+          comment.text = updatedComment;
+      });
+    },err=>{
+      this.toastr.error(err.error.message);
+      this.progress.complete();
+    },()=>{
+      this.progress.complete();      
+    });
   }
 
 }
