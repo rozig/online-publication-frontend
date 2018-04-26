@@ -3,6 +3,9 @@ import { NgProgress } from '@ngx-progressbar/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
+import * as AWS from 'aws-sdk/global';
+import * as S3 from 'aws-sdk/clients/s3';
+
 import { DataService } from './../../../services/data.service';
 
 @Component({
@@ -14,15 +17,32 @@ export class CreatePostComponent implements OnInit {
   private model: object = {
     title: '',
     body: '',
+    image: '',
     draft: false
   };
+  private currentImage;
+  private tmpImage: string;
   private freeze: boolean = false;
   constructor(private dataService: DataService, private progress: NgProgress, private toastr: ToastrService, private router: Router) { }
 
   ngOnInit() {
   }
 
+  updatePostImage(evt: any) {
+    if (evt.target.files && evt.target.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = (evt:any) => {
+        this.tmpImage = evt.target.result;
+      }
+      this.currentImage = evt.target.files[0];
+      this.uploadToS3('post', evt.target.files[0]);
+      reader.readAsDataURL(evt.target.files[0]);
+    }
+  }
+
   onSubmit() {
+
     this.progress.start();
     this.freeze = true;
     this.dataService.createPost(this.model).subscribe(data => {
@@ -38,4 +58,40 @@ export class CreatePostComponent implements OnInit {
     });
   }
 
+  uploadToS3(type, file) {
+    const AWSService = AWS;
+    const region = 'us-east-1';
+    const bucketName = 'online-publication';
+    const accessKeyId = 'AKIAIX5R6JCUZ2FSGL3A';
+    const secretAccessKey = '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';
+    let folderName = '';
+
+    if(type == 'post') {
+      folderName = 'post-images/';
+    } else if(type == 'user') {
+      folderName = 'profile-images/';
+    }
+
+    const bucket = new S3({
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
+      region: region
+    });
+
+    const params = {
+      Bucket: bucketName,
+      Key: folderName + file.name,
+      Body: file
+    };
+
+    bucket.upload(params, function (err, data) {
+      if (err) {
+        console.log('There was an error uploading your file: ', err);
+        return false;
+      }
+
+      console.log('Successfully uploaded file.', data);
+      return true;
+    });
+  }
 }

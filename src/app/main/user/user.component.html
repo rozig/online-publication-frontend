@@ -15,8 +15,8 @@
       </span>
     </div>
     <div class="profile-picture" [style.backgroundImage]="'url(' + user.profile_picture + ')'">
-      <img *ngIf="profilePicture" [src]="tmpProfile" alt="New profile image">
-      <label for="picture">
+      <img *ngIf="tmpProfile && myself" [src]="tmpProfile" alt="New profile image">
+      <label for="picture" *ngIf="myself">
         <input type="file" id="picture" [(ngModel)]="profilePicture" name="profile-picture" (change)="updateProfilePicture($event)" />
         <i class="icon ion-camera"></i>
       </label>
@@ -36,9 +36,9 @@
     </div>
     <div class="content-container">
       <div *ngIf="tab == 'posts'" id="posts">
-        <div class="posts">
+        <div class="posts" *ngIf="posts && user">
           <div *ngFor="let post of posts" class="post">
-            <a class="post-title">{{ post.title }}</a>
+            <a class="post-title" [routerLink]="['/@' + user.username + '/' + (post.title + '-' + post._id | slugify)]">{{ post.title }}</a>
             <div class="post-image" [style.backgroundImage]="'url(' + post.image + ')'"></div>
             <div class="post-meta">
               <div class="votes">

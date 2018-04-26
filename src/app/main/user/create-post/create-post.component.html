@@ -4,6 +4,13 @@
       <button class="btn btn-cancel" [routerLink]="['/']">Cancel</button>
       <button class="btn btn-publish" type="submit" [disabled]="f.invalid || freeze">Publish</button>
     </div>
+    <div class="post-image">
+      <img class="tmp-image" *ngIf="model.image" [src]="tmpImage">
+      <label for="image" [class.hide]="model.image">
+        <input type="file" id="image" [(ngModel)]="model.image" name="post-image" (change)="updatePostImage($event)" />
+        <i class="icon ion-camera"></i>
+      </label>
+    </div>
     <div class="form-group">
       <input type="text" [(ngModel)]="model.title" name="title" class="form-control title" required placeholder="Title" #title="ngModel" [disabled]="freeze" />
     </div>
