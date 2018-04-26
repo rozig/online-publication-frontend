@@ -1,3 +1,79 @@
-<p>
-  post-details works!
-</p>
+<div class="wrapper">
+  <div class="section-insetColumn">
+    <div class="post-author">
+      <div class="post-author-image">
+        <img [src]="post.author.profile_picture" alt="{{ post.author.firstname + ' ' + post.author.lastname }}">
+      </div>
+      <div class="post-author-info">
+        <div class="post-author-info-name">
+          <a [routerLink]="['/@' + post.author.username]" class="author-name">{{ post.author.firstname + ' ' + post.author.lastname }}</a>
+        </div>
+        <div class="post-author-info-date">
+          <span class="post-date">{{ post.created_date | date }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section-insetColumn">
+    <h2>{{ post.title }}</h2>
+  </div>
+  <div class="section-outsetColumn">
+    <div class="section-outsetColumn-image">
+      <img src="/assets/postimg1.jpg" alt="{{ post.author.firstname + ' ' + post.author.lastname }}">
+    </div>
+  </div>
+  <div class="section-insetColumn">
+    <p>{{ post.body }}</p>
+  </div>
+  <div class="section-insetColumn">
+    <div class="post-footer">
+      <div class="post-footer-button-left">
+        <button>&#8593;</button>
+        <button>&#8595;</button>
+      </div>
+      <div class="post-footer-button-right">
+        <button>comment</button>
+        <button>f</button>
+        <button>t</button>
+      </div>
+    </div>
+  </div>
+  <div class="section-insetColumn-comment">
+    <div *ngFor="let comment of post.comments" class="post-comment">
+      <div class="post-comment-header">
+        <div class="post-comment-author-image">
+          <img [src]="comment.author.profile_picture" alt="{{ comment.author.firstname + ' ' + post.author.lastname }}">
+        </div>
+        <div class="post-comment-author-info">
+          <div class="post-comment-author-info-name">
+            <a [routerLink]="['/@' + post.author.username]" class="author-name">{{ comment.author.firstname + ' ' + comment.author.lastname }}</a>
+          </div>
+          <div class="post-comment-author-info-date">
+            <span class="post-date">{{ comment.created_date | date }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="post-comment-body">
+        <p>{{comment.text}}</p>
+      </div>
+    </div>
+    <div class="post-comment">
+      <div class="post-comment-header">
+        <div class="post-comment-author-image">
+          <img [src]="post.author.profile_picture" alt="{{ post.author.firstname + ' ' + post.author.lastname }}">
+        </div>
+        <div class="post-comment-author-info">
+          <div class="post-comment-author-info-name">
+            <a [routerLink]="['/@' + post.author.username]" class="author-name">{{ post.author.firstname + ' ' + post.author.lastname }}</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="post-comment-new-body">
+        <input type="text" name="comment">
+        <button [routerLink]="['/comment']" class="publish-button" [disabled]="freeze">Publish</button>
+      </div>
+      
+    </div>
+  </div>
+</div>

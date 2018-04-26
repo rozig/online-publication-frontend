@@ -1,0 +1,183 @@
+
+.wrapper {
+  font-family: medium-content-sans-serif-font,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+  border-box-sizing:border-box;
+  background-color: #f7f6f2;
+  overflow-x: hidden;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  .section-insetColumn{
+    margin-left:100px;
+    margin-right:100px;
+    text-align:left;
+    overflow:hidden;
+    height:auto;
+    max-width:800px;
+    width:100%;
+    .post-footer{
+      width: 100%;
+      padding-top:20px;
+      padding-bottom:40px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #dadada;
+      .post-footer-button-left{
+          float: left;
+          button{
+            margin-left: 10px;
+            font-size: 20px;
+            color:#1abc9c;
+            padding:0;
+            border-width: 0;
+            background-color: Transparent;
+          }
+      };
+      .post-footer-button-right{
+          float: right;
+          button{
+            margin-left: 10px;
+            font-size: 20px;
+            color:#7b7b7b;
+            padding:0;
+            border-width: 0;
+            background-color: Transparent;
+          }
+      };
+    }
+    .post-author{
+      width:100%;
+      padding-top:40px;
+      padding-bottom:10px;
+      .post-author-image{
+        float:left;
+        background-image: url('/assets/profile-placeholder.jpg');
+        background-size: 100%;
+        border-radius: 50%;
+        position: relative;
+        margin: 10px auto;
+        overflow: hidden;
+        height: 60px;
+        width: 60px;
+        z-index: 1;
+        img{
+          background-color: white;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          z-index: 3;
+          left: 0;
+          top: 0;
+        }
+      }
+      .post-author-info{
+        float:left;
+        margin: 20px auto;
+        .post-author-info-name{
+        margin:0 10px;
+        }
+
+        .post-author-info-date{
+        margin:0 10px;
+        }
+      }
+    }
+    p{
+      text-align:justify;
+    }
+  }
+  .section-outsetColumn {
+    margin: 20px auto;
+    text-align:center;
+    overflow: hidden;
+    color: #bbb7ae;
+    width: 100%;
+    heigth:auto;
+    .section-outsetColumn-image {
+      margin: 20px 20px;
+      overflow: hidden;
+      width:100%;
+      height:400px;
+    }
+  }
+  .section-insetColumn-comment{
+    margin-left:120px;
+    margin-right:120px;
+    text-align:left;
+    overflow:hidden;
+    height:auto;
+    max-width:740px;
+    width:100%;
+    /*box-sizing: border-box;*/
+    .post-comment{
+      margin:10px 30px;
+      border:1px solid rgba(0,0,0,.09);
+      /*width:100%;*/
+      height:auto;
+      font-weight: 400;
+      background-color: #f5f5f5;
+      border-radius: 3px;
+      .post-comment-header{
+          display: block;
+        .post-comment-author-image{
+          float:left;
+          background-image: url('/assets/profile-placeholder.jpg');
+          background-size: 100%;
+          border-radius: 50%;
+          position: relative;
+          margin: 10px 20px;
+          overflow: hidden;
+          height: 40px;
+          width: 40px;
+          z-index: 1;
+          img{
+            background-color: white;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 3;
+            left: 0;
+            top: 0;
+          }
+        }
+        .post-comment-author-info{
+          float:left;
+          margin: 10px auto;
+          .post-comment-author-info-name{
+            color:#1abc9c;
+            margin:0 10px;
+          }
+          .post-comment-author-info-date{
+            margin:0 10px;
+          }
+        }        
+      }
+      .post-comment-body{
+          clear: both;
+          margin: 20px;
+      }
+      .post-comment-new-body{
+        clear: both;
+        margin: 20px;
+        .publish-button {
+          background-color: transparent;
+          border: 1px solid #1abc9c;
+          border-radius: 3px;
+          font-weight: bold;
+          padding: 5px 15px;
+          cursor: pointer;
+          font-size: 14px;
+          color: #1abc9c;
+          -webkit-transition: 0.3s all;
+          -moz-transition: 0.3s all;
+          -ms-transition: 0.3s all;
+          -o-transition: 0.3s all;
+          transition: 0.3s all;
+          &:hover {
+            background-color: #1abc9c;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
