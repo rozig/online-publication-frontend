@@ -1,3 +1,58 @@
-<p>
-  user works!
-</p>
+<div class="profile-wrapper">
+  <div *ngIf="user" class="info">
+    <div class="name">
+      <input type="text" name="fullname" [(ngModel)]="fullname" [placeholder]="mode == 'edit' ? 'Fullname seperated by space' : ''" [disabled]="mode != 'edit'" />
+    </div>
+    <div class="bio">
+      <textarea name="bio" [(ngModel)]="user.bio" [placeholder]="mode == 'edit' ? 'Enter your bio here' : ''" [disabled]="mode != 'edit'"></textarea>
+    </div>
+    <div class="follower-info">
+      <span>
+        <strong>{{ user.following.length }}</strong> Following
+      </span>
+      <span>
+        <strong>{{ user.followers.length }}</strong> Followers
+      </span>
+    </div>
+    <div class="profile-picture" [style.backgroundImage]="'url(' + user.profile_picture + ')'">
+      <img *ngIf="profilePicture" [src]="tmpProfile" alt="New profile image">
+      <label for="picture">
+        <input type="file" id="picture" [(ngModel)]="profilePicture" name="profile-picture" (change)="updateProfilePicture($event)" />
+        <i class="icon ion-camera"></i>
+      </label>
+    </div>
+  </div>
+  <div class="actions">
+    <button *ngIf="mode == 'view' && myself" class="btn btn-edit" (click)="mode = 'edit'">Edit</button>
+    <button *ngIf="false" class="btn btn-follow">Follow</button>
+    <button *ngIf="mode == 'edit' && myself" class="btn btn-cancel" (click)="mode = 'view'">Cancel</button>
+    <button *ngIf="mode == 'edit' && myself" class="btn btn-update" (click)="updateProfile();mode = 'view'">Update</button>
+    <button *ngIf="!myself" class="btn btn-{{ following ? 'un' : '' }}follow" (click)="follow(user._id)">Follow{{ following ? 'ing' : '' }}</button>
+  </div>
+  <div class="user-data">
+    <div class="tabs">
+      <div class="tab" [class.active]="tab == 'posts'" (click)="tab = 'posts'">Posts</div>
+      <div class="tab" [class.active]="tab == 'comments'" (click)="tab = 'comments'">Comments</div>
+    </div>
+    <div class="content-container">
+      <div *ngIf="tab == 'posts'" id="posts">
+        <div class="posts">
+          <div *ngFor="let post of posts" class="post">
+            <a class="post-title">{{ post.title }}</a>
+            <div class="post-image" [style.backgroundImage]="'url(' + post.image + ')'"></div>
+            <div class="post-meta">
+              <div class="votes">
+                <i class="icon ion-android-favorite"></i> {{ post.upVotes.length - post.downVotes.length }}
+              </div>
+              <div class="comments">
+                <i class="icon ion-chatbubbles"></i> {{ post.comments.length }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="retrieve-more">Load more</div>
+      </div>
+      <div *ngIf="tab == 'comments'" id="comments"></div>
+    </div>
+  </div>
+</div>

@@ -21,13 +21,15 @@ export class MainComponent implements OnInit, OnDestroy {
     if(localStorage.getItem('token')) {
       this.subscription = this.dataService.getUser().subscribe(response => {
         this.user = response['data'];
-        sessionStorage.setItem('user', this.user);
+        sessionStorage.setItem('user', JSON.stringify(this.user));
       });
     }
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 }
