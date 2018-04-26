@@ -38,8 +38,27 @@ export class DataService {
     if(token) {
       this.headers = this.headers.set('x-token', localStorage.getItem('token'));
     }
+    console.log(`${this.BASE_URL}/comments/${comment_id}/post/${post_id}`);
   	return this.http.delete(`${this.BASE_URL}/comments/${comment_id}/post/${post_id}`,{headers:this.headers});
   }
+
+  updateComment(comment_id,post_id,updatedComment){
+  	const token = localStorage.getItem('token');
+    if(token) {
+      this.headers = this.headers.set('x-token', localStorage.getItem('token'));
+    }
+    console.log(`${this.BASE_URL}/comments/${comment_id}/post/${post_id}`);
+  	return this.http.put(`${this.BASE_URL}/comments/${comment_id}/post/${post_id}`,updatedComment,{headers:this.headers});
+  }
+
+  createComment(post_id,newComment){
+  	const token = localStorage.getItem('token');
+    if(token) {
+      this.headers = this.headers.set('x-token', localStorage.getItem('token'));
+    }
+  	return this.http.post(`${this.BASE_URL}/comments/post/${post_id}`,newComment,{headers:this.headers});
+  }
+
   getPostsByUser(username: string): Observable<any> {
     return this.http.get(`${this.BASE_URL}/posts/by-user/${username}`, { headers: this.headers });
   }
