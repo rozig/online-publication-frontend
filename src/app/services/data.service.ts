@@ -24,4 +24,20 @@ export class DataService {
     }
     return this.http.post(`${this.BASE_URL}/posts`, payload, { headers: this.headers });
   }
+
+  getHomePost(){
+    return this.http.get(`${this.BASE_URL}/posts`,{headers:this.headers});
+  }
+
+  getPostDetail(post_id){
+    return this.http.get(`${this.BASE_URL}/posts/${post_id}`,{headers:this.headers});
+  }
+
+  deleteComment(comment_id,post_id){
+  	const token = localStorage.getItem('token');
+    if(token) {
+      this.headers = this.headers.set('x-token', localStorage.getItem('token'));
+    }
+  	return this.http.delete(`${this.BASE_URL}/comments/${comment_id}/post/${post_id}`,{headers:this.headers});
+  }
 }
